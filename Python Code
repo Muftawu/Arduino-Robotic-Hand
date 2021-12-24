@@ -1,0 +1,23 @@
+# By Yiwere Muftawu Mohammed
+KNUST-kUMAS 
+GHANA
+
+## Robotic hand python Code
+
+import cv2
+from cvzone.HandTrackingModule import HandDetector
+from cvzone.SerialModule import SerialObject
+
+cap = cv2.VideoCapture(0)
+detector = HandDetector(maxHands=1,detectionCon=0.8)
+arduino = SerialObject('/dev/ttyUSB0')
+
+while True:
+    success, img = cap.read()
+    hands, bboxInfo = detector.findHands(img)
+    if len(hands) == 1:
+        fingers = detector.fingersUp(hands[0])
+        arduino.sendData(fingers)
+
+    cv2.imshow('img', img)
+    cv2.waitKey(1)
