@@ -1,0 +1,85 @@
+/* Yiwere Muftawu Mohammed 
+KNUST-KUMASI 
+GHANA
+*/
+
+#include "Servo.h"
+#define numOfValRec       5
+#define digitsPerValRec   1
+
+Servo servoThumb;
+Servo servoIndex;
+Servo servoMiddle;
+Servo servoRing;
+Servo servoPinky;
+
+int valRec[numOfValRec];
+int counter = 0;
+bool counterStart = false;
+int stringLength = numOfValRec * digitsPerValRec + 1;
+String receivedString;
+
+void setup () {
+  Serial.begin(9600);
+
+  servoThumb.attach(7);
+  servoIndex.attach(8);
+  servoMiddle.attach(9);
+  servoRing.attach(10);
+  servoPinky.attach(11);
+}
+
+void loop () {
+  // lol
+  receivedData();
+  if (valRec[0] == 1) {
+    servoThumb.write(180);
+  }  else {
+    servoThumb.write(0);
+  }
+  if (valRec[1] == 1) {
+    servoIndex.write(180);
+  }  else {
+    servoIndex.write(0);
+  }
+  if (valRec[2] == 1) {
+    servoMiddle.write(180);
+  } else {
+    servoMiddle.write(0);
+  }
+  if (valRec[3] == 1) {
+    servoRing.write(180);
+  }   else {
+    servoRing.write(0);
+  }
+  if (valRec[4] == 1) {
+    servoPinky.write(180);
+  }  else {
+    servoPinky.write(0);
+  }
+}
+
+void receivedData () {
+  while (Serial.available() ) {
+    char c = Serial.read();
+
+    if (c == '$') {
+      counterStart = true;
+    }
+    if (counterStart) {
+      if (counter < stringLength ) {
+        receivedString = String(receivedString + c);
+        counter ++;
+      }
+      if (counter >= stringLength) {
+        for (int m = 0; m < numOfValRec; m++) {
+          int num = (m * digitsPerValRec) + 1;
+          valRec[m] = receivedString.substring(num, num + digitsPerValRec).toInt();
+        }
+        counterStart = false;
+        counter = 0;
+        receivedString = "";
+      }
+    }
+  }
+}
