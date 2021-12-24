@@ -1,0 +1,16 @@
+The following are the packages to be installed 
+
+1. ON PYTHON 
+a. cvzone                 pip install cvzone
+b. cv2                    pip install opencv-python
+
+
+2. ARDUINO
+a. Servo library 
+Can be downloaded from the in-built arduino library manager.
+or online at  
+
+
+GITHUB
+https://github.com/arduino-libraries/Servo/tree/master/src
+
